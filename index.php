@@ -57,5 +57,5 @@ require_once './vendor/autoload.php';
 require_once "./controllers/connect-gsheet.php";
 
 // Render quiz page
-require_once "./controllers/render-page.php";
+require_once "./public/multipane.php";
 ?>

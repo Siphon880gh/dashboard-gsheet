@@ -17,7 +17,7 @@ $(document).ready(function() {
     if(!records) records = [];
     var data = records;
     console.log({headers, data});
-    debugger;
+    // debugger;
 
     // Create a 'columns' array for the DataTable configuration
     var columns = headers.map(function(header) {

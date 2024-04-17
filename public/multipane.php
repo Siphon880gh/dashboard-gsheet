@@ -94,7 +94,7 @@ $overrideCSS
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#modal-more-questions" style="cursor:pointer;">
+                        <a class="nav-link" data-bs-toggle="modal" data-bs-target="#modal-contact" style="cursor:pointer;">
                         <i class="fas fa-help"></i> Help
                         </a>
                     </li>
@@ -146,6 +146,27 @@ $overrideCSS
         </div>
         This is for educational purposes only. We are not responsible for any harm or damage from using these tools.
     </div>
+
+    <!-- Modal: Contact me -->
+    <div class="modal fade" id="modal-contact" tabindex="-1" aria-labelledby="Contact me modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalContactLabel">Contact</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>  <!-- modal-header -->
+            <div class="modal-body">
+                <div class="text-center">
+                    <a href="https://wengindustry.com/me/contact/" target="_blank">Contact Weng</a><br/>
+                </div>
+            </div> <!-- modal-body -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
+            </div> <!-- modal-footer -->
+        </div>  <!-- modal-content -->
+    </div>  <!-- modal-dialog -->
+</div>  <!-- modal -->
+
 
     
     <!-- Scripts -->
