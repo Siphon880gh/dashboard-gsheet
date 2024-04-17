@@ -1,0 +1,25 @@
+{
+    "name": "wengffung/fintest",
+    "autoload": {
+        "psr-4": {
+            "Wengffung\\Fintest\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Siphon880gh",
+            "email": "weng.f.fung@gmail.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.12.1"
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Drive",
+            "YouTube",
+            "YouTubeAnalytics",
+            "YouTubeReporting"
+        ]
+    }
+}
