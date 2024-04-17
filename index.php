@@ -12,7 +12,7 @@ $inputs = [
 
     /* Display */
     "pageTitle"=>"Dashboard",
-    "pageDescription"=>"Monitor Stock: Apple<br/>In the future will have more options...",
+    "pageDescription"=>"Monitor Stock: Apple, Google, Tesla<br/>In the future will have more options...",
 
     /* Optionals OR set as defaults 0 and "" respectively */
     "timeLeft"=>0,

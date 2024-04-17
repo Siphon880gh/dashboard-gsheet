@@ -78,11 +78,12 @@ $overrideCSS
                 <h2 class="intro-title display-5-off">Connections</h2>
                 <p class="intro-description lead"><?php echo $pageDesc; ?></p>
                 <section class="btn-wrapper text-center my-4">
-                    <!--
-                    <button class="btn btn-lg btn-primary px-4" onclick="ui.nextPage()">Start Unshuffled</button>
-                    <button class="btn btn-lg btn-secondary me-2" onclick="questions.shuffle(); ui.nextPage();">Start Shuuffled</button>
-                    -->
-                    <button class="btn btn-lg btn-primary me-2" onclick="questions.shuffle(); ui.nextPage();">Start</button>
+
+                    <div id="data-table-wrapper" class="card" style="padding:10px; overflow:scroll;">
+                        <table id="data-table" class="">
+                        </table>
+
+                    </div>
                 </section>
             </article>
 
@@ -106,71 +107,17 @@ $overrideCSS
     </div> <!-- Ends container-fluid -->
 
 
-    <!-- Modal: More Questions -->
-    <div class="modal fade" id="modal-more-questions" tabindex="-1" aria-labelledby="modalMoreQuestionsLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="modalMoreQuestionsLabel">Extend Quiz</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="text-center">
-                Take all the questions again. Will shuffle:
-                <a  role="button" class="nav-link" onclick="questions.doubleQuestions(); alert('Done! You now have the questions twice and shuffled');">x2 All Questions</a>
-
-            </div>
-            <div>
-                <p></p>
-            </div>
-            <div class="text-center">
-                See more of the current question:
-                <a  role="button" class="nav-link" onclick="if(ui.getQuestionIndex()===-1) { alert('Start the quiz first!'); } else { questions.tripleThisQuestion(ui.getQuestionIndex()); alert('Done! You now have this question three more times'); }">x3 This Question</a>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
-        </div>
-        </div>
-    </div>
-    </div>
-
     <div class="container promote-features">
         <hr/>
         By <a href="javascript:void(0)" onclick="$('.creds-socials').toggleClass('d-none');">Weng</a>.<br/>
         <div class='creds-socials d-none'>
         <a target="_blank" href="https://github.com/Siphon880gh" rel="nofollow"><img src="https://img.shields.io/badge/GitHub--blue?style=social&logo=GitHub" alt="Github" data-canonical-src="https://img.shields.io/badge/GitHub--blue?style=social&logo=GitHub" style="max-width:8.5ch;"></a>
-        <a target="_blank" href="https://www.linkedin.com/in/weng-fung/" rel="nofollow"><img src="https://camo.githubusercontent.com/0f56393c2fe76a2cd803ead7e5508f916eb5f1e62358226112e98f7e933301d7/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f4c696e6b6564496e2d626c75653f7374796c653d666c6174266c6f676f3d6c696e6b6564696e266c6162656c436f6c6f723d626c7565" alt="Linked-In" data-canonical-src="https://img.shields.io/badge/LinkedIn-blue?style=flat&amp;logo=linkedin&amp;labelColor=blue" style="max-width:10ch;"></a>
-        <a target="_blank" href="https://www.youtube.com/user/Siphon880yt/" rel="nofollow"><img src="https://camo.githubusercontent.com/0bf5ba8ac9f286f95b2a2e86aee46371e0ac03d38b64ee2b78b9b1490df38458/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f596f75747562652d7265643f7374796c653d666c6174266c6f676f3d796f7574756265266c6162656c436f6c6f723d726564" alt="Youtube" data-canonical-src="https://img.shields.io/badge/Youtube-red?style=flat&amp;logo=youtube&amp;labelColor=red" style="max-width:10ch;"></a>
+        <a target="_blank" href="https://www.linkedin.com/in/weng-fung/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-blue?style=flat&logo=linkedin&labelColor=blue" alt="Linked-In" data-canonical-src="https://img.shields.io/badge/LinkedIn-blue?style=flat&amp;logo=linkedin&amp;labelColor=blue" style="max-width:10ch;"></a>
+        <a target="_blank" href="https://www.youtube.com/user/Siphon880yt/" rel="nofollow"><img src="https://img.shields.io/badge/Youtube-red?style=flat&logo=youtube&labelColor=red" alt="Youtube" data-canonical-src="https://img.shields.io/badge/Youtube-red?style=flat&amp;logo=youtube&amp;labelColor=red" style="max-width:10ch;"></a>
         </div>
         This is for educational purposes only. We are not responsible for any harm or damage from using these tools.
     </div>
 
-    <!-- PHP writes to first, then Handlebars takes over -->
-    <script id="template-question" type="text/x-handlebars">
-        <header class="question-header text-secondary">
-            <h2 class="question-title display-5-off">{{{questionTitle}}}</h2>
-            <section class="quiz-stats text-end">
-                <span id="progress"><span id="progress-index">{{increment questionIndex}}</span>/{{questionsLength}}</span>
-                <?php
-                
-                    if(isset($timeLeft) && gettype($timeLeft)=="integer" && $timeLeft>0) {
-                        echo "<span id='time-left'>$timeLeft</span>";
-                    }
-                ?>
-            </section>
-        </header>
-        <div class="question-description">{{{questionSubtemplate}}}</div>
-        <div class="question-instruction">{{{questionInstruction}}}</div>
-        <nav class="question-choices-wrapper">
-           __inject__choices__subtemplate__
-        </nav>
-        <section class="question-nav p-2 clearfix">
-            {{#if confirmChoiceSubtemplate}}
-                {{{confirmChoiceSubtemplate}}}
-            {{/if}}
-        </section>
-    </script>
     
     <!-- Scripts -->
     <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
@@ -180,6 +127,12 @@ $overrideCSS
     <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.dataTables.css">
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
     <script src="./public/assets/dashboard-a.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>
