@@ -27,6 +27,12 @@ $(document).ready(function() {
     // Initialize the DataTable
     $('#data-table').DataTable({
         columns: columns,  // pass the dynamically created column configuration
-        data: data   // pass the array of records
+        data: data,   // pass the array of records
+        responsive: true,
+        fixedHeader: true,
+        ordering: false,
+        fixedColumns: {
+            left: 1
+        },
     });
 });
