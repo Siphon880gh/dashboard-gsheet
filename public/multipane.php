@@ -5,61 +5,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?></title>
-    <script>
-        // PHP brings in Google Sheet Data directly is faster
-        window.payload = `<?php echo $json; ?>`;
-        window.payload = JSON.parse(window.payload);
-        for(i=0;i<window.payload.length;i++) {
-            for(j=0; j<window.payload[i].length; j++) {
-                    // At the level of row i -> cell j 
-                    window.payload[i][j] = window.payload[i][j].replaceAll("__DOUBLE__QUOTE__", '"');
-                    // console.log(window.payload[i][j]);
-            } // for
-        } // for
-    </script>
 
     <!-- Styling  -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="<?php echo $_SESSION["root_url"] . "public/" ?>assets/fonts/remixicon.css" rel="stylesheet">
-    <link rel="stylesheet" href="./public/assets/dashboard-a.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="./public/assets/multipane.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
 
-<?php
-if(isset($overrideCSS) && strlen($overrideCSS)>0) {
-echo "<style>
-$overrideCSS
-</style>";
-}
-?>
 
-    <style>
-        .container-fluid {
-            padding-right:  2.5px !important;
-            padding-left: 2.5px !important;
-        }
-        .intro, #data-table-wrapper {
-            padding: 0 !important;
-        }
-        @media screen and (min-width:768px) {
-            .container-fluid {
-                padding-right: var(--bs-gutter-x, .75rem) !important;
-                padding-left: var(--bs-gutter-x, .75rem) !important;
-            }
-            .intro {
-                padding-top: 1rem !important;
-                padding-bottom: 1rem !important;
-                padding-right: 1rem !important;
-                padding-left: 1rem !important;
-            }
-            #data-table-wrapper {
-                padding: 10px;
-            }
-        }
-        thead > tr > th:nth-child(1), tbody > tr > td:nth-child(1) {
-            background-color: white;
-            z-index: 100;
-        }
-    </style>
+    <!-- Scripts -->
+    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.dataTables.css">
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
+    <script src="./public/assets/multipane.js?v=<?php echo time(); ?>"></script>
 
 </head>
 
@@ -106,32 +74,57 @@ $overrideCSS
             <article class="intro <?php echo $jumbo; ?>" data-page=0>
                 <h2 class="intro-title display-5-off">Connections</h2>
                 <p class="intro-description lead"><?php echo $pageDesc; ?></p>
-                <section class="btn-wrapper text-center my-4">
+                <section id="data-tables" class="btn-wrapper text-center my-4">
 
-                    <div id="data-table-wrapper" class="card" style="padding:10px; overflow:scroll;">
-                        <table id="data-table" class="">
-                        </table>
 
-                    </div>
+                <?php
+                    // gotten
+                    // $service
+                    // $spreadsheetId
+                    // $tabs
+
+                    $panelCount = 0;
+                    foreach ($tabs as $tabName) {
+                        include "./controllers/connect-tab.php";
+
+                        // gotten
+                        // $values
+                        // $json
+
+                        echo "
+                        <script>
+                            // PHP brings in Google Sheet Data directly is faster
+                            var payload = '$json';
+                            payload = JSON.parse(payload);
+                            
+                            for(i=0;i<payload.length;i++) {
+                                for(j=0; j<payload[i].length; j++) {
+                                        // At the level of row i -> cell j 
+                                        payload[i][j] = payload[i][j].replaceAll(\"__DOUBLE__QUOTE__\", '\"');
+                                        // console.log(payload[i][j]);
+                                } // for
+                            } // for
+                        </script>
+                        
+                        <div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' data-internal-id='module-$tabName'>
+                            <h3 style='padding:0; margin:0;'>$tabName</h3>
+                            <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
+                            <table id='data-table-$panelCount'>
+                            </table>
+                        </div>
+
+                        <script>
+                            var idSelector = '#data-table-$panelCount';
+                            renderIn(idSelector, payload);
+                        </script>
+                        ";
+                        $panelCount++;
+                    } // for
+                ?>
+
                 </section>
             </article>
 
-
-            <article class="question <?php echo $jumbo; ?> d-none" data-page=1>
-                <!-- #template-question will interpolate and hydrate here -->
-            </article>
-            
-
-            <article class="finish text-center <?php echo $jumbo; ?> d-none" data-page=2>
-                <h2 class="finish-title display-5-off">Finished!</h2>
-                <p class="finish-description">Thanks for playing.</p>
-                <section class="finish-score fs-4 pt-3">__Finished__Score</section>
-                <footer class="pt-3 clearfix">
-                    <span class="float-end">
-                        <a href="#reload" onclick="window.location.reload()">Play again</a>
-                    </span>
-                </footer>
-            </article>
         </main>
     </div> <!-- Ends container-fluid -->
 
@@ -149,40 +142,24 @@ $overrideCSS
 
     <!-- Modal: Contact me -->
     <div class="modal fade" id="modal-contact" tabindex="-1" aria-labelledby="Contact me modal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalContactLabel">Contact</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>  <!-- modal-header -->
-            <div class="modal-body">
-                <div class="text-center">
-                    <a href="https://wengindustry.com/me/contact/" target="_blank">Contact Weng</a><br/>
-                </div>
-            </div> <!-- modal-body -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
-            </div> <!-- modal-footer -->
-        </div>  <!-- modal-content -->
-    </div>  <!-- modal-dialog -->
-</div>  <!-- modal -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalContactLabel">Contact</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>  <!-- modal-header -->
+                <div class="modal-body">
+                    <div class="text-center">
+                        <a href="https://wengindustry.com/me/contact/" target="_blank">Contact Weng</a><br/>
+                    </div>
+                </div> <!-- modal-body -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
+                </div> <!-- modal-footer -->
+            </div>  <!-- modal-content -->
+        </div>  <!-- modal-dialog -->
+    </div>  <!-- modal -->
 
 
-    
-    <!-- Scripts -->
-    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-
-    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedheader/3.1.9/css/fixedHeader.dataTables.css">
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
-    <script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
-    <script src="./public/assets/dashboard-a.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

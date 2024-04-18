@@ -12,22 +12,31 @@ $client->setAuthConfig($credsGsheetJSONFile);
 $service = new \Google_Service_Sheets($client);
 $spreadsheetId = $connectToSpreadSheetUrlId;
 // From spreadsheet: https://docs.google.com/spreadsheets/d/1ArIhTwTrEACKEvYDsvw4cONX9-LbeH2_FLh1kcfUsQs/
-$range = $connectToTab; // here we use the name of the Sheet to get all the rows
-$response = $service->spreadsheets_values->get($spreadsheetId, $range);
+// $range = $connectToTab; // here we use the name of the Sheet to get all the rows
 
-// OFF|on: Get values tested
-$values = $response->getValues();
 
-// Make parseable
-for($i = 0; $i<count($values); $i++) {
-    // Otherwise bad control character in string literal in JSON:
-    $values[$i] = preg_replace("/\n/", "\\n", $values[$i]);
-    // Otherwise double quote breaks JSON. Will convert back on Javascript side.
-    $values[$i] = preg_replace("/\"/", "__DOUBLE__QUOTE__", $values[$i]);
+$spreadsheet = $service->spreadsheets->get($spreadsheetId);
+
+$tabs = [];
+foreach ($spreadsheet->getSheets() as $sheet) {
+    $tabName = $sheet->getProperties()->getTitle();
+    $tabs[] = $tabName;
 }
 
-// In the future might consider flag: JSON_UNESCAPED_SLASHES
-$json = json_encode($values);
-// echo $json;
-// die();
+
+
+function makeParseable(&$values, &$json) {
+
+    // Make parseable
+    for($i = 0; $i<count($values); $i++) {
+        // Otherwise bad control character in string literal in JSON:
+        $values[$i] = preg_replace("/\n/", "\\n", $values[$i]);
+        // Otherwise double quote breaks JSON. Will convert back on Javascript side.
+        $values[$i] = preg_replace("/\"/", "__DOUBLE__QUOTE__", $values[$i]);
+    }
+    
+    // In the future might consider flag: JSON_UNESCAPED_SLASHES
+    $json = json_encode($values);
+    return $values;
+}
 ?>

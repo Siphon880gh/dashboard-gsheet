@@ -30,7 +30,8 @@ $_SESSION["spreadsheet-link"] = $inputs["spreadsheetUrl"];
 $re = '/.*\/(.+)\/$/m';
 preg_match_all($re, $inputs["spreadsheetUrl"], $matches, PREG_SET_ORDER, 0);
 $connectToSpreadSheetUrlId = $matches[0][1];
-$connectToTab = $inputs["tabName"];
+// $connectToTab = $inputs["tabName"];
+$connectToTab = -1;
 
 $pageTitle = $inputs["pageTitle"];
 $pageDesc = $inputs["pageDescription"];

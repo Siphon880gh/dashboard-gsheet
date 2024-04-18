@@ -548,3 +548,52 @@ body:has(.btn-match[disabled]) .mix-match-droppable {
 body:has(.btn-rank[disabled]) .question-choices {
     background-color: var(--colorCorrect) !important;
 }
+.container-fluid {
+    padding-right:  2.5px !important;
+    padding-left: 2.5px !important;
+}
+.intro {
+    padding: 0 !important;
+}
+
+#data-tables {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+
+#data-tables {
+    flex-flow: column nowrap;
+}
+
+
+@media screen and (min-width:768px) {
+    #data-tables {
+        flex-flow: row wrap;
+    }
+}
+
+/* Pane */
+.data-table-wrapper {
+    padding: 0 !important;
+}
+@media screen and (min-width:768px) {
+    .container-fluid {
+        padding-right: var(--bs-gutter-x, .75rem) !important;
+        padding-left: var(--bs-gutter-x, .75rem) !important;
+    }
+    .intro {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        padding-right: 1rem !important;
+        padding-left: 1rem !important;
+    }
+    .data-table-wrapper {
+        padding: 10px !important;
+    }
+}
+thead > tr > th:nth-child(1), tbody > tr > td:nth-child(1) {
+    background-color: white;
+    z-index: 100;
+}
