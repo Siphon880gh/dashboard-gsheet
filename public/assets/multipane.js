@@ -29,7 +29,7 @@ function renderIn(idSelector, payload) {
         data: records,   // pass the array of records
         responsive: true,
         fixedHeader: true,
-        ordering: false,
+        // ordering: false,
         fixedColumns: {
             left: 1
         },

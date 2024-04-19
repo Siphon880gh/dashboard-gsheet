@@ -32,10 +32,6 @@
 </head>
 
 <body>
-    <?php
-        // Bootstrap annoyingly removed Jumbotron, so to improve readability:
-        $jumbo = "container bg-light rounded-3 px-3 py-3 px-md-5 py-md-4 my-2 my-2 my-md-4 my-md-4";
-    ?>
     
     <div class="container-fluid">
         <header class="site-header clearfix">
@@ -71,7 +67,7 @@
             </nav>
         </header>
         <main class="site-body">
-            <article class="intro <?php echo $jumbo; ?>" data-page=0>
+            <article class="intro container bg-light rounded-3 px-3 py-3 px-md-5 py-md-4 my-2 my-2 my-md-4 my-md-4" data-page=0>
                 <h2 class="intro-title display-5-off">Connections</h2>
                 <p class="intro-description lead"><?php echo $pageDesc; ?></p>
                 <section id="data-tables" class="btn-wrapper text-center my-4">
@@ -79,12 +75,15 @@
 
                 <?php
                     // gotten
-                    // $service
                     // $spreadsheetId
                     // $tabs
 
                     $panelCount = 0;
                     foreach ($tabs as $tabName) {
+                        if (strcasecmp($tabName, "INFO") == 0 || strcasecmp($tabName, "COVER") == 0) {
+                            continue;  // Skip the current iteration if it's "Info"
+                        }
+
                         include "./controllers/connect-tab.php";
 
                         // gotten
@@ -118,6 +117,67 @@
                             renderIn(idSelector, payload);
                         </script>
                         ";
+
+
+                        $chart_info = [];
+
+                        if(strpos(strtoupper($tabName), "[XYYYY-LINE")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "XYYYY-LINE";
+                            $chart_info["HUMAN_LABEL"] = "XYYYY-LINE";
+                            $PARAM = ""; // TODO Probably will get all string after first [. Then parse from tabName if has (.
+                            $interm = str_replace(" ", "", $PARAM); 
+                            $interm = str_replace("(", "", $PARAM); 
+                            $interm = str_replace(")", "", $PARAM); 
+                            $chart_info["PARAMS"] = $interm; // Eg: A,B
+                        } else if(strpos(strtoupper($tabName), "[XYYY-LINE")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "XYYY-LINE";
+                            $chart_info["HUMAN_LABEL"] = "XYYY-LINE";
+                        } else if(strpos(strtoupper($tabName), "[XYY-LINE")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "XYY-LINE";
+                            $chart_info["HUMAN_LABEL"] = "XYY-LINE";
+                        } else if(strpos(strtoupper($tabName), "[XY-LINE")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "XY-LINE";
+                            $chart_info["HUMAN_LABEL"] = "XY-LINE";
+                        } else if(strpos(strtoupper($tabName), "[BAR")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "BAR";
+                            $chart_info["HUMAN_LABEL"] = "BAR";
+                        } else if(strpos(strtoupper($tabName), "[PIE")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "PIE";
+                            $chart_info["HUMAN_LABEL"] = "PIE";
+                        } else if(strpos(strtoupper($tabName), "[SCATTER")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "SCATTER";
+                            $chart_info["HUMAN_LABEL"] = "SCATTER";
+                        } else if(strpos(strtoupper($tabName), "[HISTO")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "HISTO";
+                            $chart_info["HUMAN_LABEL"] = "HISTO";
+                        } else if(strpos(strtoupper($tabName), "[AREA")!==false) {
+                            $chart_info["TABNAME"] = $tabName;
+                            $chart_info["CHART_TYPE"] = "AREA";
+                            $chart_info["HUMAN_LABEL"] = "AREA";
+                        };
+                        // TODO: Parameters like "Test [XY-LINE(A,B)]" should be parsed for column labels. But how to efficiently store and retrieve for code logic
+                        // TODO: How to associate which tabula rdata to which chart we want
+
+                        if(count($chart_info)>0) {
+                            echo "
+                                <div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' data-internal-id='module-$tabName-chart'>
+                                    <h3 style='padding:0; margin:0;'>" . $chart_info["HUMAN_LABEL"] . "</h3>
+                                    <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
+                                    <div>
+                                    Coming soon! A chart will be displayed here.
+                                    </div>
+                                </div>
+                            ";
+                        }
+
                         $panelCount++;
                     } // for
                 ?>
