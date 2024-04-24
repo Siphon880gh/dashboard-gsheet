@@ -45,7 +45,7 @@
             <nav class="site-nav">
                 <i class="nav-mobile-icon fas fa-bars" onclick="event.target.classList.toggle('active')"></i>
                 <ul class="nav">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="<?php echo $_SESSION["root_url"]; ?>">
                             <i class="fas fa-arrow-left"></i> More Connections
                         </a>
@@ -57,10 +57,10 @@
                         <a class="nav-link" href="#" onclick="questions.shuffle(); alert('Reshuffled questions');">
                             <i class="fas fa-random"></i> Strategies
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="<?php echo $_SESSION["spreadsheet-link"]; ?>" target="_blank">
-                            <i class="fas fa-table"></i> Admin
+                            <i class="fas fa-table"></i> Google-Sheet
                         </a>
                     </li>
                     <li class="nav-item">
