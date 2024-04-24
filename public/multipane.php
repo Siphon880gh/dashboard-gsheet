@@ -315,16 +315,19 @@
     <div class="modal fade" id="modal-contact" tabindex="-1" aria-labelledby="Contact me modal" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <!-- <div class="modal-header">
                     <h5 class="modal-title" id="modalContactLabel">Contact</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>  <!-- modal-header -->
+                </div>  -->
+                <!-- modal-header -->
                 <div class="modal-body">
+                    <br/><br/>
                     <div class="text-center">
-                        <a href="https://wengindustry.com/me/contact/" target="_blank">Contact Weng</a><br/>
+                        <div>Ask any questions or report bugs:</div>
+                        <a href="https://wengindustry.com/me/contact/" target="_blank" style="text-decoration:none;">Contact Weng</a><br/>
                     </div>
                 </div> <!-- modal-body -->
-                <div class="modal-footer">
+                <div class="modal-footer" style="border:0;">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Done</button>
                 </div> <!-- modal-footer -->
             </div>  <!-- modal-content -->
