@@ -29,6 +29,12 @@
     <script src="https://cdn.datatables.net/fixedheader/3.1.9/js/dataTables.fixedHeader.min.js"></script>
     <script src="./public/assets/multipane.js?v=<?php echo time(); ?>"></script>
 
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css"></link>
+    <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script> <!-- Touch gestures -->
+    <script src="//cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7/dist/chartjs-plugin-zoom.min.js"></script>
+
 </head>
 
 <body>
@@ -79,7 +85,9 @@
                     // $tabs
 
                     $panelCount = 0;
-                    foreach ($tabs as $tabName) {
+                    $chartCount = 0;
+                    for($i=0; $i<count($tabs); $i++) {
+                        $tabName = $tabs[$i];
                         if (strcasecmp($tabName, "INFO") == 0 || strcasecmp($tabName, "COVER") == 0) {
                             continue;  // Skip the current iteration if it's "Info"
                         }
@@ -105,7 +113,7 @@
                             } // for
                         </script>
                         
-                        <div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' data-internal-id='module-$tabName'>
+                        <div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' id='module-$tabName'>
                             <h3 style='padding:0; margin:0;'>$tabName</h3>
                             <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
                             <table id='data-table-$panelCount'>
@@ -120,6 +128,9 @@
 
 
                         $chart_info = [];
+                        $chart_type = "";
+                        $hasChart = false;
+                        $columns = [];
 
                         if(strpos(strtoupper($tabName), "[XYYYY-LINE")!==false) {
                             $chart_info["TABNAME"] = $tabName;
@@ -142,6 +153,112 @@
                             $chart_info["TABNAME"] = $tabName;
                             $chart_info["CHART_TYPE"] = "XY-LINE";
                             $chart_info["HUMAN_LABEL"] = "XY-LINE";
+                            $chart_type = $chart_info["CHART_TYPE"];
+
+                            $chartHtml = "<div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' data-tab-name='$tabName' data-chart-type='$chart_type' id='chart-$chartCount'>
+                                <h3 style='padding:0; margin:0;'>" . $chart_info["HUMAN_LABEL"] . "</h3>
+                                <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
+                                <canvas></canvas>
+                        </div>";
+
+                        $hasColumnIndicators = strpos($tabName, "(");
+                        if($hasColumnIndicators) {
+                            // Localize string to chart type and get rid of square brackets
+                            $pos = strpos($tabName, "[");
+                            $chartRaw = substr($tabName, $pos);
+                            $chartRaw = preg_replace("/\\[/", "", $chartRaw);
+                            $chartRaw = preg_replace("/\\]/", "", $chartRaw);
+                            // var_dump($chartRaw);
+                            
+                            // Localize string to columns and get rid of parentheses
+                            $pos = strpos($chartRaw, "(");
+                            $chartRaw = substr($chartRaw, $pos);
+                            $chartRaw = preg_replace("/\\(/", "", $chartRaw);
+                            $chartRaw = preg_replace("/\\)/", "", $chartRaw);
+                            // var_dump($chartRaw); // A,B
+                            
+                            // Convert "A,B" to [0,1]
+                            $chartRowIndexes = explode(",", $chartRaw);
+                            // var_dump($chartRowIndexes);
+                            
+                            function convertToIntIndexes($letter) {
+                                // Convert the letter to uppercase to standardize (assuming A-Z only)
+                                $letter = strtoupper($letter);
+                                // Subtract the ASCII value of 'A' and add 0 to convert 'A' to 0, 'B' to 1, etc.
+                                return ord($letter) - ord('A');
+                            }
+                            
+                            $chartRowIndexes = array_map('convertToIntIndexes', $chartRowIndexes);
+                            //var_dump($chartRowIndexes);
+                            $columns = $chartRowIndexes;
+                            
+                        } else {
+                            $columns = [0, 1];
+                        } // get $columns of the data you will send to chartjs
+
+                        $cPayload = $values;
+                        array_splice($cPayload, 0, 1);
+                        $xValues = array_column($cPayload, $columns[0]);
+                        $yValues = array_column($cPayload, $columns[1]);
+
+                        // var_dump($xValues);
+                        // var_dump($yValues);
+                        // die();
+
+                        function combineArraysToPoints($xValues, $yValues) {
+                            $points = [];
+                            $maxLength = max(count($xValues), count($yValues));
+                            $lastX = $xValues[count($xValues) - 1];
+                            $lastY = $yValues[count($yValues) - 1];
+                        
+                            for ($i = 0; $i < $maxLength; $i++) {
+                                $x = $i < count($xValues) ? $xValues[$i] : $lastX;
+                                $y = $i < count($yValues) ? $yValues[$i] : $lastY;
+                                $points[] = ['x' => $x, 'y' => $y];
+                            }
+                        
+                            return $points;
+                        } // combineArraysToPoints
+
+                        $mappedPoints = combineArraysToPoints($xValues, $yValues); // [{x: 1, y: 2}, {x: 2, y: 3}, ...]
+                        
+                        
+
+                            $chartJs = "<script>
+                            var datum = '" . json_encode($mappedPoints) . "';
+                            datum = JSON.parse(datum);
+                            debugger;
+                            
+                            var ctx = document.getElementById('chart-$chartCount').getElementsByTagName('canvas')[0].getContext('2d');
+                            var lineChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    datasets: [{
+                                        label: 'Line Dataset',
+                                        data: datum,
+                                        fill: true,
+                                        borderColor: 'rgb(75, 192, 192)', // Optional: adds color to the line
+                                        tension: 0.1 // Optional: adds slight curvature to the line
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        xAxes: [{
+                                            type: 'linear',
+                                            position: 'bottom',
+                                            ticks: {
+                                                maxTicksLimit: 6000,
+                                                stepSize: 6000,
+                                            }
+                                        }],
+                                        yAxes: {
+                                            beginAtZero: true // Ensures the y-axis starts at 0
+                                        }
+                                    }
+                                }
+                            });
+                            </script>";
+                            $hasChart = true;
                         } else if(strpos(strtoupper($tabName), "[BAR")!==false) {
                             $chart_info["TABNAME"] = $tabName;
                             $chart_info["CHART_TYPE"] = "BAR";
@@ -166,16 +283,10 @@
                         // TODO: Parameters like "Test [XY-LINE(A,B)]" should be parsed for column labels. But how to efficiently store and retrieve for code logic
                         // TODO: How to associate which tabula rdata to which chart we want
 
-                        if(count($chart_info)>0) {
-                            echo "
-                                <div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' data-internal-id='module-$tabName-chart'>
-                                    <h3 style='padding:0; margin:0;'>" . $chart_info["HUMAN_LABEL"] . "</h3>
-                                    <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
-                                    <div>
-                                    Coming soon! A chart will be displayed here.
-                                    </div>
-                                </div>
-                            ";
+                        if($hasChart) {
+                            echo $chartHtml;
+                            echo $chartJs;
+                            $chartCount++;
                         }
 
                         $panelCount++;
