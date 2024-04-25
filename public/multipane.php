@@ -113,7 +113,7 @@
                             } // for
                         </script>
                         
-                        <div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' id='module-$tabName'>
+                        <div class='data-table-wrapper card' style='padding:10px; overflow:scroll; resize:both;' id='module-$tabName'>
                             <h3 style='padding:0; margin:0;'>$tabName</h3>
                             <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
                             <table id='data-table-$panelCount'>
@@ -155,7 +155,7 @@
                             $chart_info["HUMAN_LABEL"] = "XY-LINE";
                             $chart_type = $chart_info["CHART_TYPE"];
 
-                            $chartHtml = "<div class='data-table-wrapper card' style='padding:10px; overflow:scroll;' data-tab-name='$tabName' data-chart-type='$chart_type' id='chart-$chartCount'>
+                            $chartHtml = "<div class='data-table-wrapper card' style='padding:10px; overflow:scroll; resize:both;' data-tab-name='$tabName' data-chart-type='$chart_type' id='chart-$chartCount'>
                                 <h3 style='padding:0; margin:0;'>" . $chart_info["HUMAN_LABEL"] . "</h3>
                                 <hr style='padding:0; margin:0; margin-bottom:10px;'></hr>
                                 <canvas></canvas>
