@@ -577,6 +577,8 @@ body:has(.btn-rank[disabled]) .question-choices {
 /* Pane */
 .data-table-wrapper {
     padding: 0 !important;
+    width: 100%;
+    height: auto;
 }
 @media screen and (min-width:768px) {
     .container-fluid {

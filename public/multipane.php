@@ -227,7 +227,6 @@
                             $chartJs = "<script>
                             var datum = '" . json_encode($mappedPoints) . "';
                             datum = JSON.parse(datum);
-                            debugger;
                             
                             var ctx = document.getElementById('chart-$chartCount').getElementsByTagName('canvas')[0].getContext('2d');
                             var lineChart = new Chart(ctx, {
