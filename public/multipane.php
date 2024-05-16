@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="./public/assets/multipane.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
 
-
     <!-- Scripts -->
     <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>

@@ -1,11 +1,18 @@
 <?php
+ini_set('log_errors', 1);  
+error_reporting(E_ALL);  
 session_start();
+
+// Set error logging to page
+ini_set('display_errors', 1); // displays errors on page
 
 /* INPUTS
 Will be processed into $json and $overrideStyleBlock for templates
 ______________________________________________________________________ */
 $inputs = [
     /* Connections */
+    // No edit query at the end, Eg:
+    // "spreadsheetUrl"=>"https://docs.google.com/spreadsheets/d/1Xe6cGeHCf8kuTX-jLXr6wxDYe9xuJ76zQCEiKjnpVm8/",
     "spreadsheetUrl"=>"https://docs.google.com/spreadsheets/d/1Xe6cGeHCf8kuTX-jLXr6wxDYe9xuJ76zQCEiKjnpVm8/",
     "tabName"=>"Test",
     "creds"=>dirname(__FILE__) . "/../keys/fintest-wengf-service-account.json",
