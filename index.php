@@ -13,9 +13,9 @@ $inputs = [
     /* Connections */
     // No edit query at the end, Eg:
     // "spreadsheetUrl"=>"https://docs.google.com/spreadsheets/d/1Xe6cGeHCf8kuTX-jLXr6wxDYe9xuJ76zQCEiKjnpVm8/",
-    "spreadsheetUrl"=>"https://docs.google.com/spreadsheets/d/1Xe6cGeHCf8kuTX-jLXr6wxDYe9xuJ76zQCEiKjnpVm8/",
+    "spreadsheetUrl"=>"https://docs.google.com/spreadsheets/d/1eXsZ1ez8q-w_dpxEWdT9iqX5n1A1hLxcB0tvN_bo0rM/",
     "tabName"=>"Test",
-    "creds"=>dirname(__FILE__) . "/../keys/fintest-wengf-service-account.json",
+    "creds"=>dirname(__FILE__) . "/../keys/sapient-magnet-132701-eb7763721187.json",
 
     /* Display */
     "pageTitle"=>"Dashboard",
