@@ -34,6 +34,11 @@
     <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script> <!-- Touch gestures -->
     <script src="//cdn.jsdelivr.net/npm/chartjs-plugin-zoom@0.7.7/dist/chartjs-plugin-zoom.min.js"></script>
 
+    <script>
+    var alertDialog = alert;
+    var alert = function(){ console.log.apply(console,arguments); };
+    </script>
+
 </head>
 
 <body>
