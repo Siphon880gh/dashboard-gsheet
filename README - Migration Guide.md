@@ -26,4 +26,4 @@ cd keys
 - Your app will load the service account from `index.php`
 - So the path could be 5x levels up: `/../../../../keys`
 
-Make sure to run `composer install` to install the vendors/
+Make sure to run `composer install` to install the vendors/ and to run composer install on a non-root account (eg. `su otherUser`).
