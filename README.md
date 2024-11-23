@@ -26,7 +26,7 @@ By Weng Fei Fung. Connect your Google Sheet to a live dashboard that has tables 
 <a href="https://wengindustry.com/tools/fintest/fintest/" target="_blank">Check it out</a>
 
 ## :minidisc: Installation:
-Make sure you've setup ../keys/serviceaccount.json:
+Make sure you've setup a service account file, eg. serviceaccount.json:
 
 ```
 {
@@ -49,6 +49,8 @@ service-account.json is a file you obtain from Google Cloud Platform after enabl
 Make sure to share the google sheet to the service account's email address with full editor access. You do not have to own the spreadsheet (you can share to the service account's email as a full editor at your friend's spreadsheet when you are already an editor).
 
 Finally, you may need to edit code: index.php's "creds" key is where you place the file path to the service account file.
+
+It's recommended you keep the service account file outside the app folder for security reasons.
 
 ## :runner: Usage:
 Run index.php on a PHP apache server. 
