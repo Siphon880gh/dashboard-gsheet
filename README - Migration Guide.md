@@ -23,5 +23,5 @@ cd ../
 cd ../
 cd keys
 ```
-- Your app will load the service account from a "go" folder: `go/index.php`
-- So the path could be 5x levels up: `/../../../../../keys`
+- Your app will load the service account from `index.php`
+- So the path could be 5x levels up: `/../../../../keys`
