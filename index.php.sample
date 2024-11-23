@@ -1,6 +1,7 @@
 <?php
 ini_set('log_errors', 1);  
-error_reporting(E_ALL);  
+// error_reporting(E_ALL);  
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_NOTICE); 
 session_start();
 
 // Set error logging to page
